@@ -1,0 +1,76 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  STUDENT
+  TA
+  DOCTOR
+  ADMIN
+}
+
+enum Department {
+  COMPUTER_SCIENCE
+  SOFTWARE_ENGINEERING
+  INFORMATION_TECHNOLOGY
+  COMPUTER_ENGINEERING
+  DATA_SCIENCE
+  ARTIFICIAL_INTELLIGENCE
+  CYBERSECURITY_INFOSEC
+  INFORMATION_SYSTEMS
+  BIOINFORMATICS
+}
+
+enum AcademicYear {
+  YEAR_1
+  YEAR_2
+  YEAR_3
+  YEAR_4
+  YEAR_5
+}
+
+enum PreferredTrack {
+  FRONTEND_DEVELOPMENT
+  BACKEND_DEVELOPMENT
+  FULLSTACK_DEVELOPMENT
+  MOBILE_APP_DEVELOPMENT
+  DEVOPS
+  CLOUD_ENGINEERING
+  SOFTWARE_ARCHITECTURE
+  QUALITY_ASSURANCE
+  GAME_DEVELOPMENT
+}
+
+model User {
+  id           String   @id @default(cuid())
+
+  firstName    String
+  lastName     String
+  email        String   @unique
+  phone        String?
+
+  // جديد
+  nationalId      String        @unique
+  department      Department?
+  academicYear    AcademicYear?
+  preferredTrack  PreferredTrack?
+
+  // للـ Auth
+  passwordHash String?
+
+  role         Role     @default(STUDENT)
+
+  isEmailVerified        Boolean   @default(false)
+  emailVerificationCode  String?
+  emailVerificationExpiresAt DateTime?
+
+
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
