@@ -54,23 +54,26 @@ model User {
   email        String   @unique
   phone        String?
 
-  // جديد
   academicId     String        @unique
   department      Department?
   academicYear    AcademicYear?
   preferredTrack  PreferredTrack?
 
-  // للـ Auth
+  // OAuth
+  googleId   String? @unique
+  githubId   String? @unique
+  avatarUrl  String?
+
+  // Auth (local)
   passwordHash String?
 
   role         Role     @default(STUDENT)
 
-  isEmailVerified        Boolean   @default(false)
-  emailVerificationCode  String?
-  emailVerificationExpiresAt DateTime?
-
-
+  isEmailVerified             Boolean   @default(false)
+  emailVerificationCode       String?
+  emailVerificationExpiresAt  DateTime?
 
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
+

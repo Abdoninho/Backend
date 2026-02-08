@@ -1,5 +1,14 @@
-
-import { loginService, meService, registerService, sendVerificationService, verifyEmailService } from "./auth.service.js";
+import {
+  loginService,
+  meService,
+  registerService,
+  sendVerificationService,
+  verifyEmailService,
+  getGoogleAuthUrl,
+  getGithubAuthUrl,
+  googleCallbackService,
+  githubCallbackService,
+} from "./auth.service.js";
 
 export async function register(req, res) {
   const {
@@ -54,3 +63,30 @@ export async function verifyEmail(req, res) {
   res.json({ ok: true, data: result });
 }
 
+// -------- OAuth endpoints (JSON responses) --------
+
+// يبدأ رحلة جوجل: Redirect لصفحة جوجل
+export async function googleAuth(req, res) {
+  const url = getGoogleAuthUrl();
+  res.redirect(url);
+}
+
+// Callback من جوجل: يرجع JSON (token + user)
+export async function googleCallback(req, res) {
+  const code = req.query.code;
+  const result = await googleCallbackService(code);
+  res.json({ ok: true, data: result });
+}
+
+// يبدأ رحلة جيتهاب
+export async function githubAuth(req, res) {
+  const url = getGithubAuthUrl();
+  res.redirect(url);
+}
+
+// Callback من جيتهاب: يرجع JSON
+export async function githubCallback(req, res) {
+  const code = req.query.code;
+  const result = await githubCallbackService(code);
+  res.json({ ok: true, data: result });
+}
