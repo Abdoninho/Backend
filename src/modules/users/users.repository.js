@@ -29,6 +29,19 @@ export function updateUserById(id, data) {
   return prisma.user.update({ where: { id }, data });
 }
 
+// ✅ Delete
+export function deleteUserById(id) {
+  return prisma.user.delete({ where: { id }, select: { id: true } });
+}
+
+// ✅ For export (no pagination)
+export function listAllUsers({ where }) {
+  return prisma.user.findMany({
+    where,
+    orderBy: { createdAt: "desc" },
+  });
+}
+
 // ✅ helpers for uniqueness on edit
 export async function findUserByEmailExcludingId(email, id) {
   return prisma.user.findFirst({
